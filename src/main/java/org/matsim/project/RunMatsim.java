@@ -45,9 +45,7 @@ public class RunMatsim{
 
 	public static void main(String[] args) {
 
-		// Config config = ConfigUtils.loadConfig( args ) ;
-		
-		// possibly modify config here
+		// Config config = ConfigUtils.loadConfig( args ) ;        basic config declaration
 
 		Config config;
 		if ( args==null || args.length==0 || args[0]==null ){
@@ -64,40 +62,52 @@ public class RunMatsim{
 		
 		// possibly modify scenario here
 
+		new WhatHasBeenDone().addLinkBetweenTwoNodes(scenario, 11, 14, 24);
 
-		/*
-		Id<Link> someLinkId = Id.createLinkId(24);
-
-		for (Id<Link> linkId: scenario.getNetwork().getLinks().keySet()) {
-			if (linkId.equals(someLinkId)) {
-
+		// delete all people except person id 1
+		Id<Person> somePerson = Id.createPersonId(1);
+		List<Id<Person>> personToRemove = new ArrayList<>();
+		for (Id<Person> personId: scenario.getPopulation().getPersons().keySet()) {
+			if (!personId.equals(somePerson)) {
+				personToRemove.add(personId);
 			}
 		}
+		for (Id<Person> personId: personToRemove) {
+			scenario.getPopulation().removePerson(personId);
+		}
+		System.out.println("Population size: " + scenario.getPopulation().getPersons().size());
 
-		Node node3 = scenario.getNetwork().getNodes().get("3");
-		Node node13 = scenario.getNetwork().getNodes().get("13");
+		// adding new agent with a plan
+		PopulationFactory popFactory = scenario.getPopulation().getFactory();
 
-		Link newlink = scenario.getNetwork().getFactory().createLink(linkId, node3, node13);
+		Person timur = popFactory.createPerson(Id.createPersonId("Timur"));
+		Plan plan = popFactory.createPlan();
 
-		newlink.setCapacity(3600);
-		newlink.setFreespeed(27.78);
-		newlink.setLength(13000);
-		newlink.setNumberOfLanes(1);
+		Activity homeAct = popFactory.createActivityFromLinkId("h", Id.createLinkId(21));
+		homeAct.setEndTime(8*60*60);
+		plan.addActivity(homeAct);
 
-		scenario.getNetwork().addLink(newlink);
+		Leg leg1 = popFactory.createLeg(TransportMode.car);
+		plan.addLeg(leg1);
 
+		Activity workAct = popFactory.createActivityFromLinkId("w", Id.createLinkId(1));
+		workAct.setEndTime(17*60*60);
+		plan.addActivity(workAct);
 
-		 */
+		Leg leg2 = popFactory.createLeg(TransportMode.car);
+		plan.addLeg(leg2);
+
+		timur.addPlan(plan);
+		scenario.getPopulation().addPerson(timur);
+		System.out.println("Population size: " + scenario.getPopulation().getPersons().size());
+
 		// ---
 		
-		Controler controler = new Controler( scenario ) ;
+		Controler controler = new Controler(scenario) ;
 		
 		// possibly modify controler here
-
-        // controler.addOverridingModule( new OTFVisLiveModule() ) ;
-		
+		// controler.addOverridingModule( new OTFVisLiveModule() );          doesn't work on OSX 10.14 either
 		// ---
-		// controler.addOverridingModule( new OTFVisLiveModule() ) ;
 
 		controler.run();
 	}
