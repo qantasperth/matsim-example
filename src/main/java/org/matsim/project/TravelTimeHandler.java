@@ -10,9 +10,9 @@ import org.matsim.api.core.v01.population.Person;
 import java.time.LocalTime;
 import java.util.HashMap;
 
-public class SecondEventHandler implements PersonDepartureEventHandler, PersonArrivalEventHandler {
+public class TravelTimeHandler implements PersonDepartureEventHandler, PersonArrivalEventHandler {
 
-    HashMap<Id<Person>, Double> personTimeMap = new HashMap<>();
+    private HashMap<Id<Person>, Double> personTimeMap = new HashMap<>();
 
     @Override
     public void handleEvent(PersonDepartureEvent event) {
@@ -46,7 +46,7 @@ public class SecondEventHandler implements PersonDepartureEventHandler, PersonAr
         System.out.println("Average time travelled per agent: " + clockTime(averageTime) + "\n");
     }
 
-    public String clockTime(double seconds) {
+    private String clockTime(double seconds) {
         LocalTime timeOfDay = LocalTime.ofSecondOfDay((long)seconds);
         return timeOfDay.toString();
     }

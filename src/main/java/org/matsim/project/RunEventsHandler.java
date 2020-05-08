@@ -13,19 +13,18 @@ public class RunEventsHandler {
 
         EventsManager eventsManager = EventsUtils.createEventsManager();
 
+        DepartureArrivalHandler departureArrivalHandler = new DepartureArrivalHandler();
+        TravelTimeHandler travelTimeHandler = new TravelTimeHandler();
 
-        SimpleEventHandler eventHandler = new SimpleEventHandler();
-        SecondEventHandler eventHandler2 = new SecondEventHandler();
-
-        eventsManager.addHandler(eventHandler);
-        eventsManager.addHandler(eventHandler2);
+        eventsManager.addHandler(departureArrivalHandler);
+        eventsManager.addHandler(travelTimeHandler);
 
         MatsimEventsReader eventsReader = new MatsimEventsReader(eventsManager);
         eventsReader.readFile(inputFile);
 
-        eventHandler2.writeTravelTime(Id.createPersonId(1));
-        eventHandler2.writeTravelTime(Id.createPersonId("Timur"));
-        eventHandler2.averageTravelTime();
+        travelTimeHandler.writeTravelTime(Id.createPersonId(1));
+        travelTimeHandler.writeTravelTime(Id.createPersonId("Timur"));
+        travelTimeHandler.averageTravelTime();
     }
 }
 

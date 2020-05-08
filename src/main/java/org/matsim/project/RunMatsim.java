@@ -65,12 +65,6 @@ public class RunMatsim {
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 
 		// possibly modify scenario here:
-
-		// WhatHasBeenDone class contains some stuff I did zB:
-		// new WhatHasBeenDone().addLinkBetweenTwoNodes(scenario, 11, 14, 24);
-		// new WhatHasBeenDone().setLinkParams(scenario, 24, 3600, 27.78, 10000, 1);
-		new WhatHasBeenDone().removingAgentsAddingTimur(scenario);
-
 		// ---
 
 		Controler controler = new Controler(scenario);

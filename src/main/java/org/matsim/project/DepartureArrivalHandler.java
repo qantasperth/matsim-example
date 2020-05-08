@@ -7,7 +7,7 @@ import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
 
 import java.time.LocalTime;
 
-public class SimpleEventHandler implements PersonDepartureEventHandler, PersonArrivalEventHandler {
+public class DepartureArrivalHandler implements PersonDepartureEventHandler, PersonArrivalEventHandler {
     @Override
     public void handleEvent(PersonDepartureEvent event) {
         System.out.println("Departure event!\nTime: " + clockTime(event.getTime()) + "\nLink: "
@@ -20,7 +20,7 @@ public class SimpleEventHandler implements PersonDepartureEventHandler, PersonAr
                 + event.getLinkId()+ "\nPerson: " + event.getPersonId()+ "\n");
     }
 
-    public String clockTime(double seconds) {
+    private String clockTime(double seconds) {
         LocalTime timeOfDay = LocalTime.ofSecondOfDay((long)seconds);
         return timeOfDay.toString();
     }
