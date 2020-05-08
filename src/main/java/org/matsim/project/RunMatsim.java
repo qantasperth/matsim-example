@@ -41,75 +41,46 @@ import java.util.Set;
  *
  */
 
-public class RunMatsim{
+public class RunMatsim {
 
 	public static void main(String[] args) {
 
-		// Config config = ConfigUtils.loadConfig( args ) ;        basic config declaration
+		// basic config declaration:
+		// Config config = ConfigUtils.loadConfig(args);
 
+		// take config, overwrite output directory in project folder
 		Config config;
-		if ( args==null || args.length==0 || args[0]==null ){
-			config = ConfigUtils.loadConfig( "scenarios/equil/config.xml" );
+		if (args == null || args.length == 0 || args[0] == null) {
+			config = ConfigUtils.loadConfig("scenarios/equil/config.xml");
 		} else {
-			config = ConfigUtils.loadConfig( args );
+			config = ConfigUtils.loadConfig(args);
 		}
 		config.controler().setOverwriteFileSetting(
-				OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists );
+				OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
+
+		config.controler().setLastIteration(2);
 
 		// ---
 
-		Scenario scenario = ScenarioUtils.loadScenario(config) ;
-		
-		// possibly modify scenario here
+		Scenario scenario = ScenarioUtils.loadScenario(config);
 
-		new WhatHasBeenDone().addLinkBetweenTwoNodes(scenario, 11, 14, 24);
+		// possibly modify scenario here:
 
-		// delete all people except person id 1
-		Id<Person> somePerson = Id.createPersonId(1);
-		List<Id<Person>> personToRemove = new ArrayList<>();
-		for (Id<Person> personId: scenario.getPopulation().getPersons().keySet()) {
-			if (!personId.equals(somePerson)) {
-				personToRemove.add(personId);
-			}
-		}
-		for (Id<Person> personId: personToRemove) {
-			scenario.getPopulation().removePerson(personId);
-		}
-		System.out.println("Population size: " + scenario.getPopulation().getPersons().size());
-
-		// adding new agent with a plan
-		PopulationFactory popFactory = scenario.getPopulation().getFactory();
-
-		Person timur = popFactory.createPerson(Id.createPersonId("Timur"));
-		Plan plan = popFactory.createPlan();
-
-		Activity homeAct = popFactory.createActivityFromLinkId("h", Id.createLinkId(21));
-		homeAct.setEndTime(8*60*60);
-		plan.addActivity(homeAct);
-
-		Leg leg1 = popFactory.createLeg(TransportMode.car);
-		plan.addLeg(leg1);
-
-		Activity workAct = popFactory.createActivityFromLinkId("w", Id.createLinkId(1));
-		workAct.setEndTime(17*60*60);
-		plan.addActivity(workAct);
-
-		Leg leg2 = popFactory.createLeg(TransportMode.car);
-		plan.addLeg(leg2);
-
-		timur.addPlan(plan);
-		scenario.getPopulation().addPerson(timur);
-		System.out.println("Population size: " + scenario.getPopulation().getPersons().size());
+		// WhatHasBeenDone class contains some stuff I did zB:
+		// new WhatHasBeenDone().addLinkBetweenTwoNodes(scenario, 11, 14, 24);
+		// new WhatHasBeenDone().setLinkParams(scenario, 24, 3600, 27.78, 10000, 1);
+		new WhatHasBeenDone().removingAgentsAddingTimur(scenario);
 
 		// ---
-		
-		Controler controler = new Controler(scenario) ;
-		
-		// possibly modify controler here
-		// controler.addOverridingModule( new OTFVisLiveModule() );          doesn't work on OSX 10.14 either
+
+		Controler controler = new Controler(scenario);
+
+		// possibly modify controler here:
+		// controler.addOverridingModule( new OTFVisLiveModule() );          // doesn't work for my OSX 10.14 either
 		// ---
 
 		controler.run();
+
+		System.out.println("Iterations made: " + config.controler().getLastIteration());
 	}
-	
 }
