@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class TravelTimeHandler implements PersonDepartureEventHandler, PersonArrivalEventHandler {
 
-    private HashMap<Id<Person>, Double> personTimeMap = new HashMap<>();
+    private final HashMap<Id<Person>, Double> personTimeMap = new HashMap<>();
 
     @Override
     public void handleEvent(PersonDepartureEvent event) {

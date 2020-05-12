@@ -70,7 +70,6 @@ public class RunMatsim {
 		Controler controler = new Controler(scenario);
 
 		// possibly modify controler here:
-		// controler.addOverridingModule( new OTFVisLiveModule() );          // doesn't work for my OSX 10.14 either
 		// ---
 
 		controler.run();
