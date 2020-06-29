@@ -18,23 +18,12 @@
  * *********************************************************************** */
 package org.matsim.project;
 
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.TransportMode;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Node;
-import org.matsim.api.core.v01.population.*;
-import org.matsim.contrib.otfvis.OTFVisLiveModule;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.scenario.ScenarioUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author nagel
@@ -50,15 +39,15 @@ public class RunMatsim {
 
 		// take config, overwrite output directory in project folder
 		Config config;
-		if (args == null || args.length == 0 || args[0] == null) {
+		if (args == null || args.length == 0 || args[0] == null)
 			config = ConfigUtils.loadConfig("scenarios/equil/config.xml");
-		} else {
+		else
 			config = ConfigUtils.loadConfig(args);
-		}
+
 		config.controler().setOverwriteFileSetting(
 				OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
 
-		config.controler().setLastIteration(2);
+		config.controler().setLastIteration(1);
 
 		// ---
 
